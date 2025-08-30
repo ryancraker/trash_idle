@@ -17,6 +17,11 @@ const routes = [
     component: loadPage('AboutPage')
   },
   {
+    path: '/kira',
+    name: 'Kira',
+    component: loadPage('KiraPage')
+  },
+  {
     path: '/account',
     name: 'Account',
     component: loadPage('AccountPage'),
