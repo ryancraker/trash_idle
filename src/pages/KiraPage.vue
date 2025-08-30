@@ -39,7 +39,7 @@ function forage() {
   }
 
   /** Random encounter */
-  if (Math.ceil(Math.random() * 4) == 3) {
+  if (Math.ceil(Math.random() * 6) == 3) {
     toggleEncounter();
   }
 }
@@ -63,11 +63,12 @@ function forage() {
         </div>
         <section class="container">
           <div class="row main-pkmn">
+            Lv. {{ level.now }}
             <progress class="health-bar" :value="health" max="100">
               {{ health }}%
             </progress>
             <img src="../assets/img/rattata.png" class="rat-img" alt="rat" />
-            Lv. {{ level.now }}
+
             <progress id="xp-bar" :value="xp.now" :max="xp.max">
               {{ xp.now }}%
             </progress>
@@ -83,15 +84,15 @@ function forage() {
           </div>
           <div class="row">
             <div class="col-4">
+              <button class="btn btn-vue w-100">Pokémon Center</button>
+            </div>
+            <div class="col-4">
               <button
                 class="btn btn-vue w-100 mdi mdi-store"
                 @click="toggleStore()"
               >
                 Store
               </button>
-            </div>
-            <div class="col-4">
-              <button class="btn btn-vue w-100">click me!</button>
             </div>
             <div class="col-4">
               <button class="btn btn-vue w-100" @click="toggleEncounter()">
@@ -116,7 +117,7 @@ function forage() {
 }
 // Card
 article {
-  width: 350px;
+  min-width: 400px;
 }
 img {
   width: auto;
