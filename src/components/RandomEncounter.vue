@@ -10,6 +10,9 @@ const fightDisabled = ref(false);
 const pokemonDisabled = ref(false);
 const bagDisabled = ref(false);
 const runDisabled = ref(false);
+const is_enemy_hurt = ref(false);
+const is_enemy_faint = ref(false);
+const is_current_pokemon_hurt = ref(false);
 
 function disableAllButtons() {
   fightDisabled.value = true;
@@ -29,12 +32,20 @@ function fight() {
   /** Attack */
   AppState.enemy_pokemon.hp -= AppState.current_pokemon.attack;
 
+  /** Hurt animation */
+  is_enemy_hurt.value = true;
+  setTimeout(() => {
+    is_enemy_hurt.value = false;
+    setTimeout(() => {
+      is_enemy_hurt.value = true;
+      setTimeout(() => {
+        is_enemy_hurt.value = false;
+      }, 75);
+    }, 75);
+  }, 75);
+
   /** If enemy faints */
   if (AppState.enemy_pokemon.hp <= 0) {
-    Pop.battleEnd(
-      "Foe fainted! You gained " + AppState.enemy_pokemon.xp_yield + " xp."
-    );
-
     /** XP & Leveling up */
     AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
     if (AppState.current_pokemon.xp_now >= AppState.current_pokemon.xp_max) {
@@ -43,6 +54,17 @@ function fight() {
       AppState.current_pokemon.lvl++;
       //forage_skill.value += 5;
     }
+
+    setTimeout(() => {
+      is_enemy_faint.value = true;
+    }, 75);
+
+    Pop.battleEnd(
+      AppState.enemy_pokemon.name +
+        " fainted! You gained " +
+        AppState.enemy_pokemon.xp_yield +
+        " xp."
+    );
 
     /** Close encounter */
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
@@ -59,6 +81,19 @@ function fight() {
 function enemy_fight() {
   /** Attack */
   AppState.current_pokemon.hp_now -= AppState.enemy_pokemon.attack;
+
+  /** Hurt animation */
+  is_current_pokemon_hurt.value = true;
+  setTimeout(() => {
+    is_current_pokemon_hurt.value = false;
+    setTimeout(() => {
+      is_current_pokemon_hurt.value = true;
+      setTimeout(() => {
+        is_current_pokemon_hurt.value = false;
+      }, 75);
+    }, 75);
+  }, 75);
+
   /** If current pokemon faints */
   if (AppState.current_pokemon.hp_now <= 0) {
     /** If no more pokemon to use */
@@ -126,9 +161,11 @@ function run() {
           <div class="col-6">
             <img
               src="../assets/img/trubbish.png"
-              class="trubbish-img"
+              class="enemy-img"
+              :class="{ hurt: is_enemy_hurt }"
               alt="Trubbish"
             />
+            <!-- TOOD: add faint animation w/ faint: is_enemy_faint -->
           </div>
         </div>
         <div class="row">
@@ -136,6 +173,7 @@ function run() {
             <img
               src="../assets/img/rattata-back.png"
               class="back-img"
+              :class="{ hurt: is_current_pokemon_hurt }"
               alt="rat"
             />
           </div>
@@ -212,10 +250,29 @@ function run() {
 .card-body .col-6 button {
   margin-bottom: 8px;
 }
-.trubbish-img {
+.enemy-img {
   width: auto;
   display: inline-block;
   float: right;
+}
+img.hurt {
+  //   filter: contrast(160%);
+  //   filter: hue-rotate(180deg);
+  filter: brightness(0) invert(1);
+}
+img {
+}
+img.faint {
+  -webkit-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -ms-transition: all 0.4se;
+  -o-transition: all 0.4s;
+  transition: all 0.4s;
+  -webkit-transform: translateY(-20px);
+  -moz-transform: translateY(-20px);
+  -ms-transform: translateY(-20px);
+  -o-transform: translateY(-20px);
+  transform: translateY(-20px);
 }
 .back-img-container {
   display: flex;
@@ -223,14 +280,21 @@ function run() {
 }
 .bg-box {
   background-image: url("src/assets/img/bg/1.png");
+  max-width: 254px;
 }
 .row-btns {
-  background: var(--bs-light);
+  padding-top: 8px;
+  background: #1b1f22; //var(--bs-light);
 }
+
 .info-box {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 2px 5px;
   color: black;
+}
+
+.info-box progress {
+  max-width: 100%;
 }
 </style>

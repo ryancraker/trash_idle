@@ -159,7 +159,7 @@ function trashForDollars() {
                 class="btn btn-vue w-100 mdi mdi mdi-circle"
                 @click="togglePokemon()"
               >
-                Pokemon
+                Pokémon
               </button>
             </div>
           </div>
@@ -209,6 +209,11 @@ h2 {
 
 .card-body .col-4 {
   padding: 0px 3px;
+  align-items: stretch;
+  display: flex;
+}
+.card-body .col-4 button {
+  line-height: 1.1em;
 }
 
 .health-bar {
