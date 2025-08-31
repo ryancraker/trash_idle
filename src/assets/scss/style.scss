@@ -1,4 +1,4 @@
-@import '_main.scss';
+@import "_main.scss";
 
 #app {
   display: flex;
@@ -17,4 +17,8 @@ main {
   flex-direction: column;
   justify-content: start;
   align-items: end;
+}
+
+.img-sprite {
+  width: auto;
 }

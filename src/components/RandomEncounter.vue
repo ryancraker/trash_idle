@@ -1,15 +1,30 @@
 <script setup>
 import { AppState } from "@/AppState";
+import { Pop } from "@/utils/Pop";
 import { computed } from "vue";
 //import toggleEncounter from "@/pages/KiraPage.vue";
 
 const is_encounter_visible = computed(() => AppState.is_encounter_visible);
+const current_pokemon = computed(() => AppState.current_pokemon);
 
 function fight() {
   AppState.enemy_pokemon.hp -= AppState.current_pokemon.attack;
+  /** If enemy faints */
   if (AppState.enemy_pokemon.hp <= 0) {
+    Pop.battleEnd("Foe fainted! You gained _ xp.");
+    //setTimeout(() => {
+    /** XP & Leveling up */
     AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
+    if (AppState.current_pokemon.xp_now >= AppState.current_pokemon.xp_max) {
+      AppState.current_pokemon.xp_now -= AppState.current_pokemon.xp_max;
+      AppState.current_pokemon.xp_max *= 3;
+      AppState.current_pokemon.lvl++;
+      //forage_skill.value += 5;
+    }
+
+    /** Close encounter */
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
+    //}, 2000);
   }
 }
 function run() {
@@ -69,20 +84,48 @@ function run() {
             />
           </div>
           <div class="col-6">
-            My Pokemon's Stats
+            {{ current_pokemon.custom_name || current_pokemon.name }}
+            <span
+              v-if="AppState.enemy_pokemon.gender"
+              id="enemy-gender"
+              class="mdi mdi-gender-male"
+            ></span>
+            <span v-else id="enemy-gender" class="mdi mdi-gender-female"></span
+            >Lv.
+            {{ current_pokemon.lvl }}
             <progress class="health-bar" value="100" max="100">100%</progress>
           </div>
         </div>
         <div class="row">
           <div class="col-6 pa-0">
-            <button class="btn btn-vue w-100 mdi" @click="fight()">
+            <button
+              class="btn btn-vue w-100 mdi"
+              @click="fight()"
+              :disabled="AppState.enemy_pokemon.hp <= 0"
+            >
               Fight
             </button>
-            <button class="btn btn-vue w-100 mdi">Bag</button>
+            <button
+              class="btn btn-vue w-100 mdi"
+              :disabled="AppState.enemy_pokemon.hp <= 0"
+            >
+              Bag
+            </button>
           </div>
           <div class="col-6 pa-0">
-            <button class="btn btn-vue w-100 mdi">Pokemon</button>
-            <button class="btn btn-vue w-100 mdi" @click="run()">Run</button>
+            <button
+              class="btn btn-vue w-100 mdi"
+              :disabled="AppState.enemy_pokemon.hp <= 0"
+            >
+              Pokemon
+            </button>
+            <button
+              class="btn btn-vue w-100 mdi"
+              @click="run()"
+              :disabled="AppState.enemy_pokemon.hp <= 0"
+            >
+              Run
+            </button>
           </div>
         </div>
       </section>
