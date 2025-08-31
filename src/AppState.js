@@ -21,6 +21,7 @@ export const AppState = reactive({
     speed: 72,
     xp_now: 0,
     xp_max: 100,
+    lvl: 1,
   },
   enemy_pokemon: {
     name: "Trubbish",
