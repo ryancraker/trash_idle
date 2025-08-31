@@ -8,7 +8,7 @@ const is_encounter_visible = computed(() => AppState.is_encounter_visible);
 function fight() {
   AppState.enemy_pokemon.hp -= AppState.current_pokemon.attack;
   if (AppState.enemy_pokemon.hp <= 0) {
-    AppState.current_pokemon.xp += AppState.enemy_pokemon.xp_yield;
+    AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
   }
 }
