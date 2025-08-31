@@ -26,7 +26,7 @@ function useItem(item) {
       <div class="col-1" v-for="item in inv" :key="item.id">
         <!-- #{{ item }} -->
         <button class="" @click="useItem(item)">
-          <img :src="'/src/assets/img/' + item + '.png'" />
+          <img :src="'/src/assets/img/items/' + item + '.png'" />
         </button>
       </div>
     </div>

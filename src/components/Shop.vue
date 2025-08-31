@@ -5,27 +5,6 @@ import { computed, ref } from "vue";
 
 // defineProps({shopItem})
 
-// const store = ref({
-//   pokeball: {
-//     name: "Poké Ball",
-//     price: 5,
-//     inv: 0,
-//     id: 1,
-//   },
-//   potion: {
-//     name: "Potion",
-//     price: 10,
-//     inv: 0,
-//     id: 2,
-//   },
-// revive: {
-//   name: "Revive",
-//   price: 100,
-//   inv: 0,
-//   id: 3,
-// },
-// });
-
 const store = [
   {
     price: 5,
@@ -44,6 +23,12 @@ const store = [
     price: 100,
     inv: 0,
     id: 3,
+  },
+  {
+    name: "Exp. Share",
+    price: 100000,
+    inv: 0,
+    id: 4,
   },
 ];
 
@@ -78,11 +63,11 @@ function buy(item_price, item_id) {
         <div class="row">
           <div class="col-4" v-for="value in store" :key="value.id">
             <button
-              class="btn btn-vue w-100 mdi"
+              class="btn btn-vue btn-store w-100 mdi"
               :disabled="money < value.price"
               @click="buy(value.price, value.id)"
             >
-              <img :src="'/src/assets/img/' + value.id + '.png'" />
+              <img :src="'/src/assets/img/items/' + value.id + '.png'" /><br />
               {{ value.name }}
               ${{ value.price }}
             </button>
@@ -107,5 +92,8 @@ function buy(item_price, item_id) {
 
 .card-body .col-4 {
   padding: 0px 3px;
+}
+.btn-store {
+  margin-bottom: 5px;
 }
 </style>

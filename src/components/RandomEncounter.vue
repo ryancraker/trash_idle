@@ -34,7 +34,7 @@ function fight() {
     Pop.battleEnd(
       "Foe fainted! You gained " + AppState.enemy_pokemon.xp_yield + " xp."
     );
-    //setTimeout(() => {
+
     /** XP & Leveling up */
     AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
     if (AppState.current_pokemon.xp_now >= AppState.current_pokemon.xp_max) {
@@ -46,7 +46,6 @@ function fight() {
 
     /** Close encounter */
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
-    //}, 2000);
   } else {
     disableAllButtons();
     setTimeout(() => {
@@ -79,7 +78,7 @@ function togglePokemon() {
 }
 function run() {
   /** Random encounter */
-  if (Math.ceil(Math.random() * 6) == 3) {
+  if (Math.ceil(Math.random() * 4) == 3) {
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
     Pop.success("You ran away successfully.", "");
   } else {
@@ -98,10 +97,10 @@ function run() {
   >
     <div class="card-body">
       <h2>A wild pokemon has appeared!</h2>
-      <section class="container">
+      <section class="container bg-box">
         <div class="row">
           <div class="col-6">
-            <div id="enemy-info" class="col-12">
+            <div id="enemy-info" class="col-12 info-box">
               {{ AppState.enemy_pokemon.name }}
               <span
                 v-if="AppState.enemy_pokemon.gender"
@@ -114,15 +113,15 @@ function run() {
                 class="mdi mdi-gender-female"
               ></span>
               <span id="enemy-lvl">Lv. {{ AppState.enemy_pokemon.lvl }}</span>
+              <progress
+                class="health-bar col-12"
+                id="enemy-health-bar"
+                :value="AppState.enemy_pokemon.hp"
+                max="100"
+              >
+                {{ AppState.enemy_pokemon.hp }}%
+              </progress>
             </div>
-            <progress
-              class="health-bar col-12"
-              id="enemy-health-bar"
-              :value="AppState.enemy_pokemon.hp"
-              max="100"
-            >
-              {{ AppState.enemy_pokemon.hp }}%
-            </progress>
           </div>
           <div class="col-6">
             <img
@@ -140,7 +139,7 @@ function run() {
               alt="rat"
             />
           </div>
-          <div class="col-6">
+          <div class="col-6 info-box" id="current-pokemon-info">
             {{ current_pokemon.custom_name || current_pokemon.name }}
             <span
               v-if="AppState.enemy_pokemon.gender"
@@ -159,17 +158,17 @@ function run() {
             </progress>
           </div>
         </div>
-        <div class="row">
+        <div class="row row-btns">
           <div class="col-6 pa-0">
             <button
-              class="btn btn-vue w-100 mdi"
+              class="btn btn-danger w-100 mdi"
               @click="fight()"
               :disabled="AppState.enemy_pokemon.hp <= 0 || fightDisabled"
             >
               Fight
             </button>
             <button
-              class="btn btn-vue w-100 mdi"
+              class="btn btn-warning w-100 mdi"
               :disabled="AppState.enemy_pokemon.hp <= 0 || bagDisabled"
               @click="toggleBag()"
             >
@@ -178,7 +177,7 @@ function run() {
           </div>
           <div class="col-6 pa-0">
             <button
-              class="btn btn-vue w-100 mdi"
+              class="btn btn-primary w-100 mdi"
               @click="togglePokemon()"
               :disabled="AppState.enemy_pokemon.hp <= 0 || pokemonDisabled"
             >
@@ -221,5 +220,17 @@ function run() {
 .back-img-container {
   display: flex;
   justify-content: center;
+}
+.bg-box {
+  background-image: url("src/assets/img/bg/1.png");
+}
+.row-btns {
+  background: var(--bs-light);
+}
+.info-box {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 2px 5px;
+  color: black;
 }
 </style>
