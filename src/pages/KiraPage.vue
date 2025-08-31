@@ -2,23 +2,23 @@
 import { AppState } from "@/AppState";
 import RandomEncounter from "@/components/RandomEncounter.vue";
 import Shop from "@/components/Shop.vue";
+import Bag from "@/components/Bag.vue";
+import Pokemon from "@/components/Pokemon.vue";
 import { computed, ref } from "vue";
 
 const trash = ref(0);
-const health = ref(100);
 const trash_exchange_rate = ref(1);
 const money = computed(() => AppState.money);
-const level = ref({
-  now: 1,
-  max: 100,
-});
+
 const xp = ref({
   now: 0,
   max: 5,
 });
 const forage_skill = ref(1);
 
-// @click="showMobileMenu = !showMobileMenu"
+function healPokemon() {
+  AppState.current_pokemon.hp_now = AppState.current_pokemon.hp_max;
+}
 
 function toggleStore() {
   AppState.is_shop_visible = !AppState.is_shop_visible;
@@ -27,6 +27,14 @@ function toggleStore() {
 function toggleEncounter() {
   AppState.is_encounter_visible = !AppState.is_encounter_visible;
   AppState.enemy_pokemon.hp = 100;
+}
+
+function toggleBag() {
+  AppState.is_bag_visible = !AppState.is_bag_visible;
+}
+
+function togglePokemon() {
+  AppState.is_pokemon_visible = !AppState.is_pokemon_visible;
 }
 
 function forage() {
@@ -50,17 +58,17 @@ function trashForDollars() {
 </script>
 
 <template>
-  <div class="home-container">
-    <article class="card shadow">
+  <div class="home-container row">
+    <!-- <article class="card shadow col-4">
       <h2>Team Rocket's Hideout</h2>
       <img
         src="../assets/img/rocket-grunt.webp"
         class="grunt-img"
         alt="Rocket grunt"
       />
-    </article>
+    </article> -->
     <!-- MAIN WINDOW -->
-    <article class="card shadow">
+    <article class="card shadow col-4">
       <div class="card-body">
         <div class="card-title">
           <h1>Trash Idle</h1>
@@ -102,13 +110,22 @@ function trashForDollars() {
             >
           </div>
           <div class="row">
-            <button class="btn btn-dark-cyan w-100" @click="forage()">
+            <button
+              class="btn btn-dark-cyan w-100"
+              @click="forage()"
+              :disabled="AppState.current_pokemon.hp_now <= 0"
+            >
               Forage
             </button>
           </div>
           <div class="row">
             <div class="col-4">
-              <button class="btn btn-vue w-100">Pokémon Center</button>
+              <button
+                class="btn btn-vue w-100 mdi mdi-hospital-building"
+                @click="healPokemon()"
+              >
+                Pokémon Center
+              </button>
             </div>
             <div class="col-4">
               <button
@@ -119,15 +136,42 @@ function trashForDollars() {
               </button>
             </div>
             <div class="col-4">
-              <button class="btn btn-vue w-100" @click="toggleEncounter()">
+              <button
+                class="btn btn-vue w-100 mdi mdi-grass"
+                @click="toggleEncounter()"
+                :disabled="AppState.current_pokemon.hp_now <= 0"
+              >
                 Encounter
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <button
+                class="btn btn-vue w-100 mdi mdi-bag-personal"
+                @click="toggleBag()"
+              >
+                Bag
+              </button>
+            </div>
+            <div class="col-4">
+              <button
+                class="btn btn-vue w-100 mdi mdi mdi-circle"
+                @click="togglePokemon()"
+              >
+                Pokemon
               </button>
             </div>
           </div>
         </section>
       </div>
     </article>
-    <Shop />
+    <div class="position-relative col-4 p-0">
+      <Shop />
+      <Bag />
+      <Pokemon />
+    </div>
+
     <RandomEncounter />
   </div>
 </template>

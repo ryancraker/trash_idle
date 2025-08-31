@@ -1,17 +1,22 @@
 <script setup>
 import { AppState } from "@/AppState";
 import { Pop } from "@/utils/Pop";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 //import toggleEncounter from "@/pages/KiraPage.vue";
 
 const is_encounter_visible = computed(() => AppState.is_encounter_visible);
 const current_pokemon = computed(() => AppState.current_pokemon);
+const fightDisabled = ref(false);
 
 function fight() {
+  /** Attack */
   AppState.enemy_pokemon.hp -= AppState.current_pokemon.attack;
+
   /** If enemy faints */
   if (AppState.enemy_pokemon.hp <= 0) {
-    Pop.battleEnd("Foe fainted! You gained _ xp.");
+    Pop.battleEnd(
+      "Foe fainted! You gained " + AppState.enemy_pokemon.xp_yield + " xp."
+    );
     //setTimeout(() => {
     /** XP & Leveling up */
     AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
@@ -25,17 +30,49 @@ function fight() {
     /** Close encounter */
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
     //}, 2000);
+  } else {
+    fightDisabled.value = true;
+    setTimeout(() => {
+      console.log("wait 2 secs");
+      enemy_fight();
+      fightDisabled.value = false;
+    }, 800);
   }
 }
+
+function enemy_fight() {
+  /** Attack */
+  AppState.current_pokemon.hp_now -= AppState.enemy_pokemon.attack;
+  /** If current pokemon faints */
+  if (AppState.current_pokemon.hp_now <= 0) {
+    /** If no more pokemon to use */
+    Pop.battleEnd(
+      "You fainted...",
+      "You carry your Pokemon to the nearest center and lose " + 10 + " money."
+    );
+    AppState.is_encounter_visible = !AppState.is_encounter_visible;
+  }
+}
+
+function toggleBag() {
+  AppState.is_bag_visible = !AppState.is_bag_visible;
+}
 function run() {
-  AppState.is_encounter_visible = !AppState.is_encounter_visible;
+  /** Random encounter */
+  if (Math.ceil(Math.random() * 6) == 3) {
+    AppState.is_encounter_visible = !AppState.is_encounter_visible;
+    Pop.success("You ran away successfully.", "");
+  } else {
+    Pop.fail("Failed to run away!", "");
+    enemy_fight();
+  }
 }
 </script>
 
 <template>
   <!-- RANDOM ENCOUNTER WINDOW -->
   <article
-    class="card shadow"
+    class="card shadow col-6"
     :class="{ active: is_encounter_visible }"
     id="encounter-window"
   >
@@ -93,7 +130,13 @@ function run() {
             <span v-else id="enemy-gender" class="mdi mdi-gender-female"></span
             >Lv.
             {{ current_pokemon.lvl }}
-            <progress class="health-bar" value="100" max="100">100%</progress>
+            <progress
+              class="health-bar"
+              :value="current_pokemon.hp_now"
+              :max="current_pokemon.hp_max"
+            >
+              {{ current_pokemon.hp_now / current_pokemon.hp_max }}
+            </progress>
           </div>
         </div>
         <div class="row">
@@ -101,13 +144,14 @@ function run() {
             <button
               class="btn btn-vue w-100 mdi"
               @click="fight()"
-              :disabled="AppState.enemy_pokemon.hp <= 0"
+              :disabled="AppState.enemy_pokemon.hp <= 0 || fightDisabled"
             >
               Fight
             </button>
             <button
               class="btn btn-vue w-100 mdi"
               :disabled="AppState.enemy_pokemon.hp <= 0"
+              @click="toggleBag()"
             >
               Bag
             </button>

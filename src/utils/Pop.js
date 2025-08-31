@@ -33,6 +33,12 @@ export class Pop {
     });
   }
 
+  static fail(title, message) {
+    this.toast(title ?? "Warning!", message, "alert-decagram", {
+      color: "warning",
+    });
+  }
+
   static error(error, title, hint) {
     this.toast(
       title ?? "Oh No!",
@@ -156,23 +162,27 @@ export class Pop {
     });
   }
 
-  static async battleEnd(title = "Foe has fainted!", text = "") {
+  static async battleEnd(
+    title = "Foe has fainted!",
+    text = "",
+    confirmText = "Ok"
+  ) {
     return new Promise((resolve) => {
       const dialog = this.createDialog(`
         <div class="dialog-body" role="button" id="confirm-button">
           <h2>${title}<span class="mdi mdi-triangle-down fs-4"></span></h2>
           <hr/>
           <p>${text}</p>
+          <button id="confirm-button" class="btn btn-primary w-100" > ${confirmText} </button>
         </div>
       `);
 
+      setTimeout(() => {
+        dialog.close();
+      }, 1500);
+
       dialog.querySelector("#confirm-button").addEventListener("click", () => {
         resolve(true);
-        dialog.close();
-      });
-
-      dialog.querySelector("#cancel-button").addEventListener("click", () => {
-        resolve(false);
         dialog.close();
       });
     });
