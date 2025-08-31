@@ -167,7 +167,7 @@ function run() {
             </button>
             <button
               class="btn btn-vue w-100 mdi"
-              :disabled="AppState.enemy_pokemon.hp <= 0"
+              :disabled="AppState.enemy_pokemon.hp <= 0 || bagDisabled"
               @click="toggleBag()"
             >
               Bag
@@ -176,14 +176,14 @@ function run() {
           <div class="col-6 pa-0">
             <button
               class="btn btn-vue w-100 mdi"
-              :disabled="AppState.enemy_pokemon.hp <= 0"
+              :disabled="AppState.enemy_pokemon.hp <= 0 || pokemonDisabled"
             >
               Pokemon
             </button>
             <button
               class="btn btn-vue w-100 mdi"
               @click="run()"
-              :disabled="AppState.enemy_pokemon.hp <= 0"
+              :disabled="AppState.enemy_pokemon.hp <= 0 || runDisabled"
             >
               Run
             </button>
