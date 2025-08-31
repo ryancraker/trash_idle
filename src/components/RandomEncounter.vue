@@ -74,6 +74,9 @@ function enemy_fight() {
 function toggleBag() {
   AppState.is_bag_visible = !AppState.is_bag_visible;
 }
+function togglePokemon() {
+  AppState.is_pokemon_visible = !AppState.is_pokemon_visible;
+}
 function run() {
   /** Random encounter */
   if (Math.ceil(Math.random() * 6) == 3) {
@@ -176,6 +179,7 @@ function run() {
           <div class="col-6 pa-0">
             <button
               class="btn btn-vue w-100 mdi"
+              @click="togglePokemon()"
               :disabled="AppState.enemy_pokemon.hp <= 0 || pokemonDisabled"
             >
               Pokemon

@@ -27,6 +27,7 @@ const pc = computed(() => AppState.pokemon_pc);
   position: absolute;
   top: 0;
   visibility: hidden;
+  z-index: 101;
 }
 
 #pokemon-window.active {
