@@ -24,6 +24,7 @@ function toggleStore() {
 
 function toggleEncounter() {
   AppState.is_encounter_visible = !AppState.is_encounter_visible;
+  AppState.enemy_pokemon.hp = 100;
 }
 
 function forage() {
