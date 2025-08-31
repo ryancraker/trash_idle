@@ -19,6 +19,22 @@ export const AppState = reactive({
     sp_atk: 25,
     sp_def: 35,
     speed: 72,
+    xp_now: 0,
+    xp_max: 100,
+  },
+  enemy_pokemon: {
+    name: "Trubbish",
+    lvl: 1,
+    gender: true,
+    max_hp: 100,
+    hp: 100,
+    attack: 50,
+    defense: 62,
+    sp_atk: 40,
+    sp_def: 62,
+    speed: 65,
+    xp_yield: 66,
+    img: "../assets/img/trubbish.png",
   },
   //encountered_pokemon:{}
 });

@@ -1,25 +1,16 @@
 <script setup>
 import { AppState } from "@/AppState";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 //import toggleEncounter from "@/pages/KiraPage.vue";
 
 const is_encounter_visible = computed(() => AppState.is_encounter_visible);
-const trubbish = ref({
-  name: "Trubbish",
-  lvl: 1,
-  gender: true,
-  hp: 50,
-  attack: 50,
-  defense: 62,
-  sp_atk: 40,
-  sp_def: 62,
-  speed: 65,
-  xp_yield: 66,
-  img: "../assets/img/trubbish.png",
-});
 
 function fight() {
-  alert("fight");
+  AppState.enemy_pokemon.hp -= AppState.current_pokemon.attack;
+  if (AppState.enemy_pokemon.hp <= 0) {
+    AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
+    AppState.is_encounter_visible = !AppState.is_encounter_visible;
+  }
 }
 function run() {
   AppState.is_encounter_visible = !AppState.is_encounter_visible;
@@ -39,9 +30,9 @@ function run() {
         <div class="row">
           <div class="col-6">
             <div id="enemy-info" class="col-12">
-              {{ trubbish.name }}
+              {{ AppState.enemy_pokemon.name }}
               <span
-                v-if="trubbish.gender"
+                v-if="AppState.enemy_pokemon.gender"
                 id="enemy-gender"
                 class="mdi mdi-gender-male"
               ></span>
@@ -50,15 +41,15 @@ function run() {
                 id="enemy-gender"
                 class="mdi mdi-gender-female"
               ></span>
-              <span id="enemy-lvl">Lv. {{ trubbish.lvl }}</span>
+              <span id="enemy-lvl">Lv. {{ AppState.enemy_pokemon.lvl }}</span>
             </div>
             <progress
               class="health-bar col-12"
               id="enemy-health-bar"
-              value="100"
+              :value="AppState.enemy_pokemon.hp"
               max="100"
             >
-              100%
+              {{ AppState.enemy_pokemon.hp }}%
             </progress>
           </div>
           <div class="col-6">
