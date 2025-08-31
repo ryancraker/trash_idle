@@ -7,6 +7,23 @@ import { computed, ref } from "vue";
 const is_encounter_visible = computed(() => AppState.is_encounter_visible);
 const current_pokemon = computed(() => AppState.current_pokemon);
 const fightDisabled = ref(false);
+const pokemonDisabled = ref(false);
+const bagDisabled = ref(false);
+const runDisabled = ref(false);
+
+function disableAllButtons() {
+  fightDisabled.value = true;
+  pokemonDisabled.value = true;
+  bagDisabled.value = true;
+  runDisabled.value = true;
+}
+
+function enableAllButtons() {
+  fightDisabled.value = false;
+  pokemonDisabled.value = false;
+  bagDisabled.value = false;
+  runDisabled.value = false;
+}
 
 function fight() {
   /** Attack */
@@ -31,11 +48,11 @@ function fight() {
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
     //}, 2000);
   } else {
-    fightDisabled.value = true;
+    disableAllButtons();
     setTimeout(() => {
       console.log("wait 2 secs");
       enemy_fight();
-      fightDisabled.value = false;
+      enableAllButtons();
     }, 800);
   }
 }
