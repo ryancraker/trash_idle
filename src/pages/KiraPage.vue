@@ -68,7 +68,7 @@ function trashForDollars() {
       />
     </article> -->
     <!-- MAIN WINDOW -->
-    <article class="card shadow col-4">
+    <article class="card shadow col-4" id="main-window">
       <div class="card-body">
         <div class="card-title">
           <h1>Trash Idle</h1>
@@ -166,7 +166,10 @@ function trashForDollars() {
         </section>
       </div>
     </article>
-    <div class="position-relative col-4 p-0">
+    <div
+      class="position-relative col-9 col-md-4 p-0"
+      id="other-window-container"
+    >
       <Shop />
       <Bag />
       <Pokemon />
@@ -228,5 +231,9 @@ h2 {
   text-align: right;
   font-size: 11px;
   padding: 0;
+}
+#main-window,
+#other-window-container {
+  margin-bottom: 20px;
 }
 </style>
