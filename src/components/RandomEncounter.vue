@@ -71,7 +71,6 @@ function fight() {
   } else {
     disableAllButtons();
     setTimeout(() => {
-      console.log("wait 2 secs");
       enemy_fight();
       enableAllButtons();
     }, 800);
@@ -101,6 +100,10 @@ function enemy_fight() {
       "You fainted...",
       "You carry your Pokemon to the nearest center and lose " + 10 + " money."
     );
+    AppState.money -= 10;
+    if (AppState.money < 0) {
+      AppState.money = 0;
+    }
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
   }
 }

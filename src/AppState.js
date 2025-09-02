@@ -6,7 +6,7 @@ export const AppState = reactive({
   identity: null,
   /** @type {import('./models/Account.js').Account} user info from the database*/
   account: null,
-  money: 1000,
+  money: 10,
   is_shop_visible: false,
   is_encounter_visible: false,
   is_bag_visible: false,

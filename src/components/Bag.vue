@@ -2,6 +2,7 @@
 import { AppState } from "@/AppState";
 import { Pop } from "@/utils/Pop";
 import { computed } from "vue";
+// import { RandomEncounter }
 
 const is_visible = computed(() => AppState.is_bag_visible);
 const inv = computed(() => AppState.inventory);
@@ -29,14 +30,21 @@ function useItem(item) {
         Pop.success("You caught " + AppState.enemy_pokemon.name + "!");
       } else {
         Pop.fail(AppState.enemy_pokemon.name + " broke out.");
+        // TODO: make enemy attack;
       }
     }
 
     /* if Potion */
     // TODO
+    if (item == 2) {
+      AppState.current_pokemon.hp_now += 20;
+      // TODO: make enemy attack;
+    }
 
     /* if Revive */
     // TODO
+    // if (item == 3) {
+    // }
   }
 }
 </script>

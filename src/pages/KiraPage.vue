@@ -5,6 +5,7 @@ import Shop from "@/components/Shop.vue";
 import Bag from "@/components/Bag.vue";
 import Pokemon from "@/components/Pokemon.vue";
 import { computed, ref } from "vue";
+import { Pop } from "@/utils/Pop";
 
 const trash = ref(0);
 const trash_exchange_rate = ref(1);
@@ -53,6 +54,8 @@ function trashForDollars() {
     trash.value -= trash_exchange_rate.value;
     /** Increases current exchange rate by a factor of 3 */
     trash_exchange_rate.value = Math.ceil((trash_exchange_rate.value *= 1.1));
+  } else {
+    Pop.fail("Not enough trash to trade!");
   }
 }
 </script>
@@ -74,28 +77,34 @@ function trashForDollars() {
           <h1>Trash Idle</h1>
         </div>
         <section class="container">
-          <div class="row main-pkmn">
-            Lv. {{ AppState.current_pokemon.lvl }}
-            <progress
-              class="health-bar"
-              :value="AppState.current_pokemon.hp_now"
-              :max="AppState.current_pokemon.hp_max"
-            >
-              {{ AppState.current_pokemon.hp_now }}%
-            </progress>
-            <img src="../assets/img/rattata.png" class="rat-img" alt="rat" />
+          <div class="row" id="main-pkmn-container">
+            <div id="main-pkmn" class="col-6">
+              Lv. {{ AppState.current_pokemon.lvl }}
+              <progress
+                class="health-bar"
+                :value="AppState.current_pokemon.hp_now"
+                :max="AppState.current_pokemon.hp_max"
+              >
+                {{ AppState.current_pokemon.hp_now }}%</progress
+              ><br />
+              <img
+                src="../assets/img/rattata.png"
+                class="current-pokemon-img"
+                alt="rat"
+              /><br />
 
-            <progress
-              id="xp-bar"
-              :value="AppState.current_pokemon.xp_now"
-              :max="AppState.current_pokemon.xp_max"
-            >
-              {{ xp.now }}%
-            </progress>
-            <span id="xp-ratio"
-              >{{ AppState.current_pokemon.xp_now }} /
-              {{ AppState.current_pokemon.xp_max }}</span
-            >
+              <progress
+                id="xp-bar"
+                :value="AppState.current_pokemon.xp_now"
+                :max="AppState.current_pokemon.xp_max"
+              >
+                {{ xp.now }}%
+              </progress>
+              <span id="xp-ratio"
+                >{{ AppState.current_pokemon.xp_now }} /
+                {{ AppState.current_pokemon.xp_max }}</span
+              >
+            </div>
           </div>
           <div class="row">
             <span class="mdi mdi-trash-can-outline fs-5">{{ trash }}</span>
@@ -187,6 +196,15 @@ function trashForDollars() {
   align-items: center;
 }
 
+#main-pkmn-container {
+  background-image: url("src/assets/img/bg/dumpster.jpg");
+  background-position: bottom;
+  flex-grow: width;
+  min-height: 150px;
+}
+.current-pokemon-img {
+  margin: auto;
+}
 // Card
 article {
   min-width: 400px;
