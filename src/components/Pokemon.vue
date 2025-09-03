@@ -4,6 +4,10 @@ import { computed } from "vue";
 
 const is_visible = computed(() => AppState.is_pokemon_visible);
 const pc = computed(() => AppState.player.pokemon_pc);
+
+function togglePokemon() {
+  AppState.is_pokemon_visible = !AppState.is_pokemon_visible;
+}
 </script>
 
 <template>
@@ -12,6 +16,7 @@ const pc = computed(() => AppState.player.pokemon_pc);
     class="card shadow"
     id="pokemon-window"
   >
+    <button class="btn btn-close" @click="togglePokemon()"></button>
     <h2>Pokemon</h2>
     <div class="row">
       <div class="col-1" v-for="pokemon in pc" :key="pokemon.id">

@@ -90,7 +90,10 @@ function buy(item_price, item_id) {
 .card-body .row {
   padding: 5px 0px;
 }
-
+.nurse-img {
+  width: 100px;
+  margin: auto;
+}
 .card-body .col-4 {
   padding: 0px 3px;
 }

@@ -6,6 +6,7 @@ import Bag from "@/components/Bag.vue";
 import Pokemon from "@/components/Pokemon.vue";
 import { computed, ref } from "vue";
 import Save from "@/components/Save.vue";
+import { Pop } from "@/utils/Pop";
 
 const trash = ref(0);
 const trash_exchange_rate = ref(1);
@@ -56,6 +57,8 @@ function trashForDollars() {
     trash.value -= trash_exchange_rate.value;
     /** Increases current exchange rate by a factor of 3 */
     trash_exchange_rate.value = Math.ceil((trash_exchange_rate.value *= 1.1));
+  } else {
+    Pop.fail("Not enough trash to trade!");
   }
 }
 </script>
@@ -71,7 +74,7 @@ function trashForDollars() {
       />
     </article> -->
     <!-- MAIN WINDOW -->
-    <article class="card shadow col-4">
+    <article class="card shadow col-4" id="main-window">
       <div class="card-body">
         <div class="card-title">
           <h1>Trash Idle</h1>
@@ -171,7 +174,10 @@ function trashForDollars() {
         </section>
       </div>
     </article>
-    <div class="position-relative col-4 p-0">
+    <div
+      class="position-relative col-9 col-md-4 p-0"
+      id="other-window-container"
+    >
       <Shop />
       <Bag />
       <Pokemon />
@@ -189,6 +195,15 @@ function trashForDollars() {
   align-items: center;
 }
 
+#main-pkmn-container {
+  background-image: url("src/assets/img/bg/dumpster.jpg");
+  background-position: bottom;
+  flex-grow: width;
+  min-height: 150px;
+}
+.current-pokemon-img {
+  margin: auto;
+}
 // Card
 article {
   min-width: 400px;
@@ -233,5 +248,9 @@ h2 {
   text-align: right;
   font-size: 11px;
   padding: 0;
+}
+#main-window,
+#other-window-container {
+  margin-bottom: 20px;
 }
 </style>

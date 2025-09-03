@@ -106,6 +106,10 @@ function enemy_fight() {
       "You fainted...",
       "You carry your Pokemon to the nearest center and lose " + 10 + " money."
     );
+    AppState.player.money -= 10;
+    if (AppState.player.money < 0) {
+      AppState.player.money = 0;
+    }
     AppState.is_encounter_visible = !AppState.is_encounter_visible;
   }
 }
