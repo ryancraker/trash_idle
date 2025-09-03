@@ -3,7 +3,7 @@ import { AppState } from "@/AppState";
 import { computed } from "vue";
 
 const is_visible = computed(() => AppState.is_pokemon_visible);
-const pc = computed(() => AppState.pokemon_pc);
+const pc = computed(() => AppState.player.pokemon_pc);
 </script>
 
 <template>

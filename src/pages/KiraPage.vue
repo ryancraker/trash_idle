@@ -5,10 +5,13 @@ import Shop from "@/components/Shop.vue";
 import Bag from "@/components/Bag.vue";
 import Pokemon from "@/components/Pokemon.vue";
 import { computed, ref } from "vue";
+import Save from "@/components/Save.vue";
 
 const trash = ref(0);
 const trash_exchange_rate = ref(1);
-const money = computed(() => AppState.money);
+const money = computed(() => AppState.player.money);
+const player = computed(() => AppState.player);
+const current_pokemon = computed(() => AppState.player.current_pokemon);
 
 const xp = ref({
   now: 0,
@@ -17,7 +20,7 @@ const xp = ref({
 const forage_skill = ref(1);
 
 function healPokemon() {
-  AppState.current_pokemon.hp_now = AppState.current_pokemon.hp_max;
+  current_pokemon.value.hp_now = current_pokemon.value.hp_max;
 }
 
 function toggleStore() {
@@ -48,7 +51,7 @@ function forage() {
 function trashForDollars() {
   if (trash.value >= trash_exchange_rate.value) {
     /** Adds one dollar */
-    AppState.money++;
+    player.value.money++;
     /** Subtracts trash per current exchange rate */
     trash.value -= trash_exchange_rate.value;
     /** Increases current exchange rate by a factor of 3 */
@@ -75,26 +78,25 @@ function trashForDollars() {
         </div>
         <section class="container">
           <div class="row main-pkmn">
-            Lv. {{ AppState.current_pokemon.lvl }}
+            Lv. {{ current_pokemon.lvl }}
             <progress
               class="health-bar"
-              :value="AppState.current_pokemon.hp_now"
-              :max="AppState.current_pokemon.hp_max"
+              :value="current_pokemon.hp_now"
+              :max="current_pokemon.hp_max"
             >
-              {{ AppState.current_pokemon.hp_now }}%
+              {{ current_pokemon.hp_now }}%
             </progress>
             <img src="../assets/img/rattata.png" class="rat-img" alt="rat" />
 
             <progress
               id="xp-bar"
-              :value="AppState.current_pokemon.xp_now"
-              :max="AppState.current_pokemon.xp_max"
+              :value="current_pokemon.xp_now"
+              :max="current_pokemon.xp_max"
             >
               {{ xp.now }}%
             </progress>
             <span id="xp-ratio"
-              >{{ AppState.current_pokemon.xp_now }} /
-              {{ AppState.current_pokemon.xp_max }}</span
+              >{{ current_pokemon.xp_now }} / {{ current_pokemon.xp_max }}</span
             >
           </div>
           <div class="row">
@@ -113,7 +115,7 @@ function trashForDollars() {
             <button
               class="btn btn-dark-cyan w-100"
               @click="forage()"
-              :disabled="AppState.current_pokemon.hp_now <= 0"
+              :disabled="player.current_pokemon.hp_now <= 0"
             >
               Forage
             </button>
@@ -139,7 +141,7 @@ function trashForDollars() {
               <button
                 class="btn btn-vue w-100 mdi mdi-grass"
                 @click="toggleEncounter()"
-                :disabled="AppState.current_pokemon.hp_now <= 0"
+                :disabled="player.current_pokemon.hp_now <= 0"
               >
                 Encounter
               </button>
@@ -161,6 +163,9 @@ function trashForDollars() {
               >
                 Pokémon
               </button>
+            </div>
+            <div class="col-4">
+              <Save />
             </div>
           </div>
         </section>

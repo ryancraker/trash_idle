@@ -1,11 +1,12 @@
 <script setup>
 import { AppState } from "@/AppState";
+import { logger } from "@/utils/Logger";
 import { Pop } from "@/utils/Pop";
 import { computed, ref } from "vue";
 //import toggleEncounter from "@/pages/KiraPage.vue";
 
 const is_encounter_visible = computed(() => AppState.is_encounter_visible);
-const current_pokemon = computed(() => AppState.current_pokemon);
+const current_pokemon = computed(() => AppState.player.current_pokemon);
 const fightDisabled = ref(false);
 const pokemonDisabled = ref(false);
 const bagDisabled = ref(false);
@@ -30,7 +31,7 @@ function enableAllButtons() {
 
 function fight() {
   /** Attack */
-  AppState.enemy_pokemon.hp -= AppState.current_pokemon.attack;
+  AppState.enemy_pokemon.hp -= AppState.player.current_pokemon.attack;
 
   /** Hurt animation */
   is_enemy_hurt.value = true;
@@ -47,11 +48,15 @@ function fight() {
   /** If enemy faints */
   if (AppState.enemy_pokemon.hp <= 0) {
     /** XP & Leveling up */
-    AppState.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
-    if (AppState.current_pokemon.xp_now >= AppState.current_pokemon.xp_max) {
-      AppState.current_pokemon.xp_now -= AppState.current_pokemon.xp_max;
-      AppState.current_pokemon.xp_max *= 3;
-      AppState.current_pokemon.lvl++;
+    AppState.player.current_pokemon.xp_now += AppState.enemy_pokemon.xp_yield;
+    if (
+      AppState.player.current_pokemon.xp_now >=
+      AppState.player.current_pokemon.xp_max
+    ) {
+      AppState.player.current_pokemon.xp_now -=
+        AppState.player.current_pokemon.xp_max;
+      AppState.player.current_pokemon.xp_max *= 3;
+      AppState.player.current_pokemon.lvl++;
       //forage_skill.value += 5;
     }
 
@@ -71,7 +76,7 @@ function fight() {
   } else {
     disableAllButtons();
     setTimeout(() => {
-      console.log("wait 2 secs");
+      logger.log("wait 2 secs");
       enemy_fight();
       enableAllButtons();
     }, 800);
@@ -80,7 +85,7 @@ function fight() {
 
 function enemy_fight() {
   /** Attack */
-  AppState.current_pokemon.hp_now -= AppState.enemy_pokemon.attack;
+  AppState.player.current_pokemon.hp_now -= AppState.enemy_pokemon.attack;
 
   /** Hurt animation */
   is_current_pokemon_hurt.value = true;
@@ -95,7 +100,7 @@ function enemy_fight() {
   }, 75);
 
   /** If current pokemon faints */
-  if (AppState.current_pokemon.hp_now <= 0) {
+  if (AppState.player.current_pokemon.hp_now <= 0) {
     /** If no more pokemon to use */
     Pop.battleEnd(
       "You fainted...",

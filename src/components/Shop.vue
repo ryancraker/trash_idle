@@ -1,5 +1,6 @@
 <script setup>
 import { AppState } from "@/AppState";
+import { logger } from "@/utils/Logger";
 // import { Pop } from "@/utils/Pop";
 import { computed, ref } from "vue";
 
@@ -32,16 +33,16 @@ const store = [
   },
 ];
 
-const money = ref(AppState.money);
+const money = ref(AppState.player.money);
 const is_visible = computed(() => AppState.is_shop_visible);
 
 function buy(item_price, item_id) {
   // Pop.confirm("Would you like to buy " + item_name + "?");
   // Pop.confirm("How many " + item_name + " would you like to buy?");
-  console.log("buy");
+  logger.log(`bought ${item_id}`);
   if (money.value >= item_price) {
     money.value -= item_price;
-    AppState.inventory.push(item_id);
+    AppState.player.inventory.push(item_id);
   }
 }
 </script>

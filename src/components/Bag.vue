@@ -3,7 +3,7 @@ import { AppState } from "@/AppState";
 import { computed } from "vue";
 
 const is_visible = computed(() => AppState.is_bag_visible);
-const inv = computed(() => AppState.inventory);
+const inv = computed(() => AppState.player.inventory);
 
 function useItem(item) {
   if (AppState.is_encounter_visible) {
